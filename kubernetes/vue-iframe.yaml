@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vue-iframe
+  labels:
+    app: vue-iframe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vue-iframe
+  template:
+    metadata:
+      labels:
+        app: vue-iframe
+    spec:
+      containers:
+      - name: vue
+        image: docker.io/pydemia/grafana-iframe:0.0.1-test-k8s
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vue-iframe
+  labels:
+    app: vue-iframe
+spec:
+  type: ClusterIP
+  ports:
+    - name: service
+      port: 80
+      protocol: TCP
+      targetPort: 80
+
+  selector:
+    app: vue-iframe
